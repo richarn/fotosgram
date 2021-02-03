@@ -1,6 +1,7 @@
 import Server from "./classes/server";
-import { default as mongoose, default as userRoutes } from "./routes/usuario";
+import userRoutes from "./routes/usuario";
 
+const mongoose = require('mongoose');
 const server = new Server();
 
 
@@ -9,13 +10,10 @@ const server = new Server();
 server.app.use('/user', userRoutes);
 
 //conectar db
-mongoose.connect('mongodb://localhost:27017/fotosgram',
-  {
+mongoose.connect('mongodb://localhost:27017/fotosgram', {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true
-  }, (err) => {
+  }, (err: any) => {
 
     if (err) throw err;
     console.log('base de datos online');

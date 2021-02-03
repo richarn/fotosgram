@@ -10,7 +10,7 @@ export default class Server {
   }
 
 
-  start( callback: Function ): void {
+  start(callback: Function ): void {
     this.app.listen(this.port, callback());
   }
 

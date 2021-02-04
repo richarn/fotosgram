@@ -5,8 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var server_1 = __importDefault(require("./classes/server"));
 var usuario_1 = __importDefault(require("./routes/usuario"));
+var body_parser_1 = __importDefault(require("body-parser"));
 var mongoose = require('mongoose');
 var server = new server_1.default();
+//body parser
+server.app.use(body_parser_1.default.urlencoded({ extended: true }));
+server.app.use(body_parser_1.default.json());
 //rutas de mi app
 server.app.use('/user', usuario_1.default);
 //conectar db

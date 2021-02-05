@@ -7,6 +7,7 @@ var express_1 = require("express");
 var usuario_model_1 = require("../models/usuario.model");
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var token_1 = __importDefault(require("../classes/token"));
+var autenticacion_1 = require("../middlewares/autenticacion");
 var userRoutes = express_1.Router();
 userRoutes.post('/login', function (req, res) {
     var body = req.body;
@@ -25,7 +26,6 @@ userRoutes.post('/login', function (req, res) {
                 nombre: userDB.nombre,
                 email: userDB.email,
                 avatar: userDB.avatar,
-                password: userDB.password
             });
             res.json({
                 ok: true,
@@ -54,7 +54,6 @@ userRoutes.post('/create', function (req, res) {
             nombre: userDB.nombre,
             email: userDB.email,
             avatar: userDB.avatar,
-            password: userDB.password
         });
         res.json({
             ok: true,
@@ -65,6 +64,13 @@ userRoutes.post('/create', function (req, res) {
             ok: false,
             err: err
         });
+    });
+});
+//actualizar usuario
+userRoutes.post('/update', autenticacion_1.verificaToken, function (req, res) {
+    res.json({
+        ok: true,
+        usuario: req.usuario
     });
 });
 exports.default = userRoutes;

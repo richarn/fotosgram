@@ -1,6 +1,5 @@
 import { Schema, model, Document } from "mongoose";
 import bcrypt from 'bcrypt';
-
 import mongoose from 'mongoose';
 
 const usuarioSchema = new Schema({
@@ -25,7 +24,7 @@ const usuarioSchema = new Schema({
 
 });
 
-usuarioSchema.method('compararPassword', function (password: any): boolean {
+usuarioSchema.method('compararPassword', function (password: string = ''): boolean {
   if (bcrypt.compareSync( password, this.password )) {
     return true;
   }

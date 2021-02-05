@@ -25,6 +25,7 @@ var usuarioSchema = new mongoose_1.Schema({
     }
 });
 usuarioSchema.method('compararPassword', function (password) {
+    if (password === void 0) { password = ''; }
     if (bcrypt_1.default.compareSync(password, this.password)) {
         return true;
     }

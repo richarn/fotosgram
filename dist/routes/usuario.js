@@ -6,14 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var usuario_model_1 = require("../models/usuario.model");
 var bcrypt_1 = __importDefault(require("bcrypt"));
+var token_1 = __importDefault(require("../classes/token"));
 var userRoutes = express_1.Router();
-// userRoutes.get('/prueba', (req: Request, res: Response) => {
-//   res.json({
-//     ok: true,
-//     mensaje: 'Todo funciona bien!'
-//   })
-// });
-//login
 userRoutes.post('/login', function (req, res) {
     var body = req.body;
     usuario_model_1.Usuario.findOne({ email: body.email }, function (err, userDB) {
@@ -26,9 +20,16 @@ userRoutes.post('/login', function (req, res) {
             });
         }
         if (userDB.compararPassword(body.password)) {
+            var tokenUser = token_1.default.getJwtToken({
+                _id: userDB._id,
+                nombre: userDB.nombre,
+                email: userDB.email,
+                avatar: userDB.avatar,
+                password: userDB.password
+            });
             res.json({
                 ok: true,
-                token: "ASDJASDHAUSHDAHSD"
+                token: tokenUser
             });
         }
         else {
@@ -48,9 +49,16 @@ userRoutes.post('/create', function (req, res) {
         avatar: req.body.avatar
     };
     usuario_model_1.Usuario.create(user).then(function (userDB) {
+        var tokenUser = token_1.default.getJwtToken({
+            _id: userDB._id,
+            nombre: userDB.nombre,
+            email: userDB.email,
+            avatar: userDB.avatar,
+            password: userDB.password
+        });
         res.json({
             ok: true,
-            user: userDB
+            token: tokenUser
         });
     }).catch(function (err) {
         res.json({

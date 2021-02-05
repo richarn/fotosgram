@@ -1,6 +1,8 @@
 import { Schema, model, Document } from "mongoose";
 import bcrypt from 'bcrypt';
 
+import mongoose from 'mongoose';
+
 const usuarioSchema = new Schema({
 
   nombre: {
@@ -23,7 +25,7 @@ const usuarioSchema = new Schema({
 
 });
 
-usuarioSchema.method('compararPassword', function (password: string = ''): boolean {
+usuarioSchema.method('compararPassword', function (password: any): boolean {
   if (bcrypt.compareSync( password, this.password )) {
     return true;
   }
@@ -33,7 +35,7 @@ usuarioSchema.method('compararPassword', function (password: string = ''): boole
 });
 
 
-interface IUsuario extends Document{
+interface IUsuario extends mongoose.Document{
 
   nombre: string;
   email: string;

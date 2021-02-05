@@ -1,24 +1,16 @@
 import { Router, Request, Response, request } from "express";
 import { Usuario } from "../models/usuario.model";
 import bcrypt from 'bcrypt';
+import Token from '../classes/token';
+
 const userRoutes = Router();
 
-// userRoutes.get('/prueba', (req: Request, res: Response) => {
-    
-//   res.json({
-//     ok: true,
-//     mensaje: 'Todo funciona bien!'
-//   })
-    
-// });
-
-//login
 
 userRoutes.post('/login', (req: Request, res: Response) => {
 
   const body = req.body;
 
-  Usuario.findOne({ email: body.email }, (err: any, userDB: any) => {
+  Usuario.findOne({ email: body.email }, (err: any, userDB): Response<any, Record<string, any>> | undefined => {
   
     if (err) throw err;
 
@@ -31,9 +23,20 @@ userRoutes.post('/login', (req: Request, res: Response) => {
     
     if (userDB.compararPassword(body.password)) {
         
-          res.json({
+         
+      const tokenUser = Token.getJwtToken({
+
+        _id: userDB._id,
+        nombre: userDB.nombre,
+        email: userDB.email,
+        avatar: userDB.avatar,
+        password: userDB.password
+      });
+      
+      
+      res.json({
               ok: true,
-              token: "ASDJASDHAUSHDAHSD"
+              token: tokenUser
           });
     } else {
         res.json({
@@ -59,9 +62,21 @@ userRoutes.post('/create', (req: Request, res: Response) => {
 
   Usuario.create(user).then(userDB => {
     
+             
+    const tokenUser = Token.getJwtToken({
+
+      _id: userDB._id,
+      nombre: userDB.nombre,
+      email: userDB.email,
+      avatar: userDB.avatar,
+      password: userDB.password
+      
+    });
+    
+    
     res.json({
       ok: true,
-      user: userDB
+      token: tokenUser
     });
 
   }).catch( err => {

@@ -69,9 +69,9 @@ userRoutes.post('/create', function (req, res) {
 //actualizar usuario
 userRoutes.post('/update', autenticacion_1.verificaToken, function (req, res) {
     var user = {
-        nombre: req.body.nombre,
-        email: req.body.email,
-        avatar: req.body.avatar
+        nombre: req.body.nombre || req.usuario.nombre,
+        email: req.body.email || req.usuario.email,
+        avatar: req.body.avatar || req.usuario.avatar
     };
     usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, function (err, userDB) {
         if (err)
@@ -93,10 +93,6 @@ userRoutes.post('/update', autenticacion_1.verificaToken, function (req, res) {
             ok: true,
             token: tokenUser
         });
-    });
-    res.json({
-        ok: true,
-        usuario: req.usuario
     });
 });
 exports.default = userRoutes;

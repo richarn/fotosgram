@@ -3,18 +3,17 @@ import { verificaToken } from "../middlewares/autenticacion";
 import { Post } from "../models/post.model";
 
 
-
-
 const postRouts = Router();
 
 
 postRouts.post('/', [verificaToken], (req: any, res: any) => {
   
   const body = req.body;
-
   body.usuario = req.usuario._id;
 
-  Post.create( body ).then( postDB => {
+  Post.create(body).then( async postDB => {
+    
+   await postDB.populate('usuario', '-password').execPopulate();
 
     res.json({
       ok: true,
@@ -25,11 +24,6 @@ postRouts.post('/', [verificaToken], (req: any, res: any) => {
     res.json(err)
   });
 
-
-
 }); 
-
-
-
 
 export default postRouts;

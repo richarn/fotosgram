@@ -1,6 +1,8 @@
 import Server from "./classes/server";
+import bodyParser from "body-parser";
+
 import userRoutes from "./routes/usuario";
-import bodyParser  from "body-parser";
+import postRouts from "./routes/post";
 
 
 const mongoose = require('mongoose');
@@ -13,6 +15,7 @@ server.app.use( bodyParser.json() );
 //rutas de mi app
 
 server.app.use('/user', userRoutes);
+server.app.use('/posts', postRouts);
 
 //conectar db
 mongoose.connect('mongodb://localhost:27017/fotosgram', {
